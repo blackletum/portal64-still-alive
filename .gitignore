@@ -11,6 +11,7 @@ build/
 gfxvalidator/
 
 assets_working/
+logs/
 notes/
 portal_pak_dir/
 portal_pak_modified/
@@ -19,5 +20,3 @@ vpk/
 tools/vtf2png*
 
 controller_recording.h
-log.txt
-log_images/
