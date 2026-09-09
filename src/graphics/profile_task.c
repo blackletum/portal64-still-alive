@@ -137,9 +137,7 @@ void profileTask(OSTask* task, u16* framebuffer) {
             );
         }
 
-        // char message[32];
-        // sprintf(message, "step_%d", curr - (Gfx*)task->t.data_ptr);
-        // gdbSendImage(message, SCREEN_WD, SCREEN_HT, G_IM_FMT_RGBA, G_IM_SIZ_16b, framebuffer);
+        debug_dumpbinary(framebuffer, SCREEN_WD * SCREEN_HT * 2  /* 16-bit */);
 
         // sprintf(message, "step_zb_%d", curr - (Gfx*)task->t.data_ptr);
         // gdbSendImage(message, SCREEN_WD, SCREEN_HT, G_IM_FMT_RGBA, G_IM_SIZ_16b, zbuffer);
