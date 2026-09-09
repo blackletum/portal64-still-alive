@@ -37,7 +37,7 @@ function applyRule(basePath, sourcePath, rule) {
 
 
 if (process.argv.length !== 3) {
-    console.log('Applies normalization rules to localized audio file names.\n');
+    console.log("Applies normalization rules to localized audio file names.\n");
     console.log(`Usage: ${process.argv[0]} ${process.argv[1]} GAME_ROOT_DIR`);
     process.exit(1);
 }

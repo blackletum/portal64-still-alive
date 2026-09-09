@@ -1,6 +1,6 @@
 // This tool takes a the json output from https://github.com/andryblack/fontbuilder
 // and generates C code containing kerning and symbol information
-
+//
 // Usage:
 // 1. Use fontbuilder to generate multiple font files
 //  - Settings used by game fonts: layout=optimized box, padding=1px right
@@ -15,15 +15,15 @@
 // 3. Use this tool as follows:
 //  - node font_converter.js FontName /path/to/font_dir /path/to/output_file
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const INVALID_TOKEN_CHARACTER = /[^A-Za-z0-9_]/gim;
 
 const MAX_HASH_MULTIPLIER = 0x10000;
 
 function sanitize(s) {
-    return s.replace(INVALID_TOKEN_CHARACTER, '_');
+    return s.replace(INVALID_TOKEN_CHARACTER, "_");
 }
 
 function loadFont(fontDir) {
@@ -137,7 +137,7 @@ function generateKerning(kerning) {
 
 function generateKerningTable(fontName, kerningList) {
     return `struct FontKerning g${fontName}Kerning[] = {
-${kerningList.map(generateKerning).join('\n')}
+${kerningList.map(generateKerning).join("\n")}
 };`
 }
 
@@ -156,7 +156,7 @@ function generateSymbol(symbol) {
 
 function generateSymbolTable(fontName) {
     return `struct FontSymbol g${fontName}Symbols[] = {
-${symbolTable.sparseArray.map(generateSymbol).join('\n')}
+${symbolTable.sparseArray.map(generateSymbol).join("\n")}
 };`
 }
 

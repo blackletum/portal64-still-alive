@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const util = require('./model_list_utils');
+const fs = require("fs");
+const path = require("path");
+const util = require("./model_list_utils");
 
 function generateModelListEntry(outputPath, modelHeader) {
     const modelName = util.generateModelName(modelHeader);
@@ -8,9 +8,9 @@ function generateModelListEntry(outputPath, modelHeader) {
         _${modelName}_geoSegmentRomStart,
         _${modelName}_geoSegmentRomEnd,
         _${modelName}_geoSegmentStart,
-        &${util.generateRelativeModelName(outputPath, modelHeader, '_armature')},
-        ${util.generateRelativeModelName(outputPath, modelHeader, '_clips')},
-        ${util.generateRelativeModelName(outputPath, modelHeader, '_clip_count').toUpperCase()},
+        &${util.generateRelativeModelName(outputPath, modelHeader, "_armature")},
+        ${util.generateRelativeModelName(outputPath, modelHeader, "_clips")},
+        ${util.generateRelativeModelName(outputPath, modelHeader, "_clip_count").toUpperCase()},
         "${modelName}",
     },`;
 }

@@ -1,16 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-const util = require('util');
+const fs = require("fs");
+const path = require("path");
+const util = require("util");
 
 const INVALID_TOKEN_CHARACTER = /[^A-Za-z0-9_]/gim;
 
 function sanitize(s) {
-    return s.replace(INVALID_TOKEN_CHARACTER, '_');
+    return s.replace(INVALID_TOKEN_CHARACTER, "_");
 }
 
 function getObjectName(objectPath) {
     const { name } = path.parse(objectPath);
-    return sanitize(name.split('.')[0]);
+    return sanitize(name.split(".")[0]);
 }
 
 function generateSegmentContent(objectPath) {
@@ -30,10 +30,10 @@ function generateAlign(alignment) {
 }
 
 function generateSegment(segmentName, virtualAddress, alignment, objectPaths) {
-    const align = alignment ? `    ${generateAlign(alignment)}` : '';
+    const align = alignment ? `    ${generateAlign(alignment)}` : "";
     return `${align}    BEGIN_SEG(${segmentName}, ${virtualAddress})
     {
-        ${objectPaths.map(generateSegmentContent).join('\n        ')}
+        ${objectPaths.map(generateSegmentContent).join("\n        ")}
     }
     END_SEG(${segmentName})
 `;
@@ -43,25 +43,25 @@ function generateMultiSegments(virtualAddress, alignment, objectPaths) {
     return objectPaths.map(objectPath => {
         const segmentName = getObjectName(objectPath);
         return generateSegment(segmentName, virtualAddress, alignment, [objectPath]);
-    }).join('\n');
+    }).join("\n");
 }
 
 // Main
 const { values, positionals } = util.parseArgs({
     options: {
-        'single-segment-name': {
-            type: 'string'
+        "single-segment-name": {
+            type: "string"
         },
-        'alignment': {
-            type: 'string'
+        "alignment": {
+            type: "string"
         }
     },
     allowPositionals: true
 });
 
 const [outputLinkerScript, virtualAddress, ...objectPaths] = positionals;
-const singleSegmentName = values['single-segment-name'];
-const alignment = values['alignment'];
+const singleSegmentName = values["single-segment-name"];
+const alignment = values["alignment"];
 
 const outputParentDir = path.dirname(outputLinkerScript);
 if (!fs.existsSync(outputParentDir)) {

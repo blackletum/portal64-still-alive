@@ -1,10 +1,10 @@
-const fs = require('fs');
-const util = require('./model_list_utils');
+const fs = require("fs");
+const util = require("./model_list_utils");
 
 function generateLevelListEntry(outputPath, levelHeader) {
     const levelName = util.generateModelName(levelHeader);
     return `    {
-        &${util.generateRelativeModelName(outputPath, levelHeader, '_level')},
+        &${util.generateRelativeModelName(outputPath, levelHeader, "_level")},
         _${levelName}_geoSegmentRomStart,
         _${levelName}_geoSegmentRomEnd,
         _${levelName}_geoSegmentStart,

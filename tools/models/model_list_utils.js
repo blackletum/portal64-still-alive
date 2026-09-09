@@ -1,11 +1,11 @@
-const path = require('path');
+const path = require("path");
 
 const INVALID_TOKEN_CHARACTER = /[^A-Za-z0-9_]/gim;
 
 // Common
 
 function sanitize(s) {
-    return s.replace(INVALID_TOKEN_CHARACTER, '_');
+    return s.replace(INVALID_TOKEN_CHARACTER, "_");
 }
 
 function wrapWithIncludeGuard(outputPath, content) {
@@ -20,7 +20,7 @@ ${content}
 `;
 }
 
-function generateRelativeModelName(outputPath, modelHeader, suffix='') {
+function generateRelativeModelName(outputPath, modelHeader, suffix="") {
     const outputDirName = path.dirname(outputPath);
     const { dir: headerDirName, name: headerName } = path.parse(modelHeader);
 
@@ -38,9 +38,9 @@ function generateModelName(modelHeader) {
 
 function generateListDefinition(modelGroup, modelType) {
     const groupPascalCase = modelGroup
-        .split('_')
+        .split("_")
         .map(s => s && s.replace(/^(\w)/g, m => m.toUpperCase()))
-        .join('');
+        .join("");
 
     const listName = `g${groupPascalCase}s`;
     return `struct ${modelType} ${listName}[]`;
@@ -56,7 +56,7 @@ function generateModelIndices(outputPath, modelHeaders, modelGroup) {
     return modelHeaders.map((modelHeader, index) => {
         const modelName = generateRelativeModelName(outputPath, modelHeader, `_${modelGroup}`);
         return `#define ${modelName.toUpperCase()} ${index}`;
-    }).join('\n');
+    }).join("\n");
 }
 
 function generateListExtern(modelGroup, modelType) {
@@ -83,7 +83,7 @@ function generateIncludes(outputPath, modelHeaders) {
     return modelHeaders.map(modelHeader => {
         const relativePath = path.relative(path.dirname(outputPath), modelHeader);
         return `#include "${relativePath}"`;
-    }).join('\n');
+    }).join("\n");
 }
 
 function generateExterns(modelHeaders) {
@@ -92,14 +92,14 @@ function generateExterns(modelHeaders) {
         return `extern char _${modelName}_geoSegmentRomStart[];
 extern char _${modelName}_geoSegmentRomEnd[];
 extern char _${modelName}_geoSegmentStart[];`;
-    }).join('\n\n');
+    }).join("\n\n");
 }
 
 function generateModelList(outputPath, config) {
     const { modelHeaders, modelGroup, modelType, listEntryGenerator } = config;
 
     return `${generateListDefinition(modelGroup, modelType)} = {
-${modelHeaders.map(modelHeader => listEntryGenerator(outputPath, modelHeader)).join('\n')}
+${modelHeaders.map(modelHeader => listEntryGenerator(outputPath, modelHeader)).join("\n")}
 };`
 }
 

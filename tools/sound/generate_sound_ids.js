@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const util = require('util')
+const fs = require("fs");
+const path = require("path");
+const util = require("util")
 
 const SUPPORTED_LANGUAGES = {
     "english": "English",
@@ -15,7 +15,7 @@ const INVALID_TOKEN_CHARACTER = /[^A-Za-z0-9_]/gim;
 // Helper functions
 
 function sanitize(s) {
-    return s.replace(INVALID_TOKEN_CHARACTER, '_');
+    return s.replace(INVALID_TOKEN_CHARACTER, "_");
 }
 
 function getSoundName(soundFile, stripPrefix) {
@@ -120,7 +120,7 @@ function generateClipsHeaderFile(soundInfo) {
     return `#ifndef __SOUND_CLIPS_H__
 #define __SOUND_CLIPS_H__
 
-${soundIndices.join('\n')}
+${soundIndices.join("\n")}
 #define SOUNDS_TOTAL_COUNT ${soundIndices.length}
 
 #endif`;
@@ -141,7 +141,7 @@ function generateLanguagesHeaderFile(soundInfo) {
     return `#ifndef __LANGUAGES_H__
 #define __LANGUAGES_H__
 
-${generateLanguageConstants(languages).join('\n')}
+${generateLanguageConstants(languages).join("\n")}
 #define NUM_AUDIO_LANGUAGES ${languages.size}
 
 #define FIRST_LOCALIZED_SOUND ${[...defaultLanguageSounds.values()][0].index}
@@ -173,7 +173,7 @@ function generateLanguageSoundEntries(soundInfo) {
         }
 
         entries.push(`\t// ${language}`);
-        entries.push('\t{');
+        entries.push("\t{");
 
         // Try to use localized sounds, fall back to default language
         for (const [name, sound] of defaultLanguageSounds.entries()) {
@@ -186,7 +186,7 @@ function generateLanguageSoundEntries(soundInfo) {
             entries.push(entry);
         }
 
-        entries.push('\t},');
+        entries.push("\t},");
     }
 
     return entries;
@@ -196,25 +196,25 @@ function generateLanguagesSourceFile(soundInfo) {
     return `#include "languages.h"
 
 char* AudioLanguages[] = {
-${generateLanguageNameStrings(soundInfo.languages).join(',\n')}
+${generateLanguageNameStrings(soundInfo.languages).join(",\n")}
 };
 
 int AudioLanguageValues[][NUM_LOCALIZED_SOUNDS] = {
-${generateLanguageSoundEntries(soundInfo).join('\n')}
+${generateLanguageSoundEntries(soundInfo).join("\n")}
 };`;
 }
 
 // Main
 const { values, positionals } = util.parseArgs({
     options: {
-        'out-dir': {
-            type: 'string'
+        "out-dir": {
+            type: "string"
         }
     },
     allowPositionals: true
 });
 
-const outDir = values['out-dir'];
+const outDir = values["out-dir"];
 const soundFiles = positionals;
 
 if (!fs.existsSync(outDir)) {
@@ -224,14 +224,14 @@ if (!fs.existsSync(outDir)) {
 const soundInfo = parseSounds(soundFiles);
 
 fs.writeFileSync(
-    path.join(outDir, 'clips.h'),
+    path.join(outDir, "clips.h"),
     generateClipsHeaderFile(soundInfo)
 );
 fs.writeFileSync(
-    path.join(outDir, 'languages.h'),
+    path.join(outDir, "languages.h"),
     generateLanguagesHeaderFile(soundInfo)
 );
 fs.writeFileSync(
-    path.join(outDir, 'languages.c'),
+    path.join(outDir, "languages.c"),
     generateLanguagesSourceFile(soundInfo)
 );
