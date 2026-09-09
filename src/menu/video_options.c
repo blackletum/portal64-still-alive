@@ -1,7 +1,6 @@
 #include "video_options.h"
 
 #include "font/dejavu_sans.h"
-#include "main.h"
 #include "savefile/savefile.h"
 #include "strings/translations.h"
 #include "system/display.h"

@@ -5,7 +5,6 @@
 #include "levels/credits.h"
 #include "levels/intro.h"
 #include "levels/levels.h"
-#include "main.h"
 #include "menu/main_menu.h"
 #include "savefile/savefile.h"
 #include "scene/dynamic_scene.h"

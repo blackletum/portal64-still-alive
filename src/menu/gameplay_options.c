@@ -2,7 +2,6 @@
 
 #include "audio/soundplayer.h"
 #include "font/dejavu_sans.h"
-#include "main.h"
 #include "savefile/savefile.h"
 #include "system/controller.h"
 #include "system/display.h"
