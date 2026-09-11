@@ -94,6 +94,37 @@ will output an error message to the UNFLoader terminal and intentionally crash.
       ```
 5. Debug as described above.
 
+### RSP Profiler
+
+When hardware debugging is enabled, the game can optionally output display list
+performance information and screenshots. This data can then be used to generate
+command cost reports and heatmaps.
+
+1. Configure CMake with `RSP_PROFILER=ON` to include the RSP profiler code:
+    ```sh
+    cd portal64
+
+    # Replace <build_directory> with build directory name
+    cmake -DRSP_PROFILER=ON <build_directory>
+    ```
+2. Build the game. See [Building the Game](./building/building.md).
+3. Debug as described above, but when starting UNFLoader's GDB server, also pass
+   the `-d` argument to save console logs to a file. Screenshots will be saved
+   to the current working directory.
+    ```sh
+    # Replace <screenshot_directory> with desired screenshot directory name
+    cd <screenshot_directory>
+
+    # Replace <log_file> with desired log file path
+    UNFLoader -g -d <log_file>
+    ```
+4. While debugging, press d-pad down on controller 3 to profile the last
+   rendered frame.
+5. When finished debugging, pass the log file and screenshot directory paths to the
+   [tools/debugging/parse_rsp_profile.js](../tools/debugging/parse_rsp_profile.js)
+   script to generate reports and heatmaps for each profiled frame. See the
+   script for more information.
+
 ## GDB Setup
 
 Regardless of emulation or original hardware, debugging is done using

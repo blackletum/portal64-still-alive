@@ -9,14 +9,13 @@
 .vs/
 build/
 gfxvalidator/
-
-assets_working/
 logs/
-notes/
 portal_pak_dir/
 portal_pak_modified/
 vpk/
 
-tools/vtf2png*
+assets_working/
+notes/
 
+tools/vtf2png*
 controller_recording.h
