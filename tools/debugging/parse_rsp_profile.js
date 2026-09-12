@@ -543,16 +543,15 @@ for (let i = 0; i < debugLogLines.length; ++i) {
         currentProfile = new Profile(symbolMap, screenshotDir);
     }
 
-    if (currentProfile) {
-        if (currentProfile.tryUpdate(line)) {
-            continue;
-        } else if (currentProfile.isFinished) {
+    if (currentProfile?.tryUpdate(line)) {
+        if (currentProfile.isFinished) {
             currentProfile.write(outputDir, sort=!unsorted);
             console.log(`Wrote ${currentProfile.name} to ${outputDir}`);
 
             currentProfile = null;
-            continue;
         }
+
+        continue;
     }
 
     symbolMap.tryUpdate(line);
