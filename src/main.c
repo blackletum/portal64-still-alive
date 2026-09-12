@@ -25,7 +25,7 @@
 #endif
 
 #if PORTAL64_WITH_RSP_PROFILER
-#include "graphics/profile_task.h"
+#include "system/libultra/rsp_profiler_libultra.h"
 #endif
 
 #define MAX_FRAME_BUFFER_MESGS 8
@@ -200,7 +200,7 @@ int main() {
 #if PORTAL64_WITH_RSP_PROFILER
                 if (controllerGetButtonsDown(2, ControllerButtonDown)) {
                     struct GraphicsTask* task = &gGraphicsTasks[drawBufferIndex];
-                    profileTask(&task->task.list, task->framebuffer);
+                    rspProfilerRun(&task->task.list, task->framebuffer);
                 }
 #endif
 

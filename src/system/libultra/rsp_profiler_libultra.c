@@ -1,4 +1,4 @@
-#include "profile_task.h"
+#include "rsp_profiler_libultra.h"
 
 #include "debugger/debug.h"
 #include "system/display.h"
@@ -71,7 +71,7 @@ static void setSchedulerQueue(OSMesgQueue* messageQueue) {
     osSetIntMask(mask);
 }
 
-void profileTask(OSTask* task, u16* framebuffer) {
+void rspProfilerRun(OSTask* task, u16* framebuffer) {
     // Block scheduler thread
     OSPri origThreadPriority = osGetThreadPri(NULL);
     osSetThreadPri(NULL, RSP_SCHEDULER_THREAD_PRIORITY + 1);

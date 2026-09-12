@@ -1,6 +1,5 @@
 #include "dynamic_asset_loader.h"
 
-#include "graphics/profile_task.h"
 #include "memory.h"
 #include "system/cartridge.h"
 

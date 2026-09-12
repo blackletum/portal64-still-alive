@@ -182,19 +182,6 @@ if (GFX_VALIDATOR)
     )
 endif()
 
-if (RSP_PROFILER)
-    if (NOT DEBUGGER)
-        message(FATAL_ERROR "Hardware debugging must be enabled to use the RSP profiler")
-    endif()
-
-    target_sources(engine INTERFACE
-        graphics/profile_task.c
-    )
-    target_compile_definitions(engine INTERFACE
-        PORTAL64_WITH_RSP_PROFILER
-    )
-endif()
-
 #########################
 ## Version information ##
 #########################
@@ -233,3 +220,16 @@ target_sources(engine INTERFACE
     system/libultra/rsp_scheduler_libultra.c
     system/libultra/time_libultra.c
 )
+
+if (RSP_PROFILER)
+    if (NOT DEBUGGER)
+        message(FATAL_ERROR "Hardware debugging must be enabled to use the RSP profiler")
+    endif()
+
+    target_sources(engine INTERFACE
+        system/libultra/rsp_profiler_libultra.c
+    )
+    target_compile_definitions(engine INTERFACE
+        PORTAL64_WITH_RSP_PROFILER
+    )
+endif()
