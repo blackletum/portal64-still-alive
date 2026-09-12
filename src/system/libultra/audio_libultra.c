@@ -220,7 +220,7 @@ static void audioExecuteCommandList(Acmd* commandList, u32 commandListSize) {
     task.list.t.dram_stack = NULL;
     task.list.t.dram_stack_size = 0;
     task.list.t.output_buff = NULL;
-    task.list.t.output_buff_size = NULL;
+    task.list.t.output_buff_size = 0;
     task.list.t.data_ptr = (u64*)commandList;
     task.list.t.data_size = commandListSize * sizeof(Acmd);
     task.list.t.yield_data_ptr = NULL;

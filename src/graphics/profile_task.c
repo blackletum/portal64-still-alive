@@ -63,6 +63,16 @@ static void waitForDPAvailable() {
     while (osDpGetStatus() & (DPC_STATUS_DMA_BUSY | DPC_STATUS_END_VALID | DPC_STATUS_START_VALID));
 }
 
+static void setSchedulerQueue(OSMesgQueue* messageQueue) {
+    OSIntMask mask = osSetIntMask(OS_IM_NONE);
+
+    osSetEventMesg(OS_EVENT_SP, messageQueue, (OSMesg)SP_EVENT_MSG);
+    osSetEventMesg(OS_EVENT_DP, messageQueue, (OSMesg)DP_EVENT_MSG);
+    osViSetEvent(messageQueue, (OSMesg)VI_EVENT_MSG, 1);
+
+    osSetIntMask(mask);
+}
+
 void profileTask(OSTask* task, u16* framebuffer) {
     // Block scheduler thread
     OSPri origThreadPriority = osGetThreadPri(NULL);
@@ -75,10 +85,10 @@ void profileTask(OSTask* task, u16* framebuffer) {
     OSMesgQueue messageQueue;
     OSMesg messages[MESSAGE_QUEUE_SIZE];
     osCreateMesgQueue(&messageQueue, messages, MESSAGE_QUEUE_SIZE);
+    setSchedulerQueue(&messageQueue);
 
-    osSetEventMesg(OS_EVENT_SP, &messageQueue, (OSMesg)SP_EVENT_MSG);
-    osSetEventMesg(OS_EVENT_DP, &messageQueue, (OSMesg)DP_EVENT_MSG);
-    osViSetEvent(&messageQueue, (OSMesg)VI_EVENT_MSG, 1);
+    // Show progress
+    osViSwapBuffer(framebuffer);
 
     debug_printf("Begin RSP profile\n");
 
@@ -105,18 +115,14 @@ void profileTask(OSTask* task, u16* framebuffer) {
             gDPPipeSync(dl++);
             gDPFullSync(dl++);
             gSPEndDisplayList(dl++);
-
-            // Ensure RSP can see changes. Not very precise, but seems to work.
-            osWritebackDCacheAll();
+            osWritebackDCache(curr, 3 * sizeof(Gfx));
 
             // Render
             Time taskStart = timeGetTime();
             osSpTaskStart(task);
 
             OSMesg msg;
-            do {
-                osRecvMesg(&messageQueue, &msg, OS_MESG_BLOCK);
-            } while ((int)msg != DP_EVENT_MSG);
+            while (osRecvMesg(&messageQueue, &msg, OS_MESG_NOBLOCK) == -1 || (int)msg != DP_EVENT_MSG);
 
             // Display list run time up to but not including dummied-out command
             uint64_t taskNs = timeNanoseconds(timeGetTime() - taskStart);
@@ -124,8 +130,9 @@ void profileTask(OSTask* task, u16* framebuffer) {
             // Restore original display list
             waitForDPAvailable();
             memCopy(curr, tmp, 3 * sizeof(Gfx));
-            osWritebackDCacheAll();
+            osWritebackDCache(curr, 3 * sizeof(Gfx));
 
+            // Report current command info, and time to reach it
             debug_printf(
                 "%d/%d 0x%08x%08x %d.%d ms\n",
                 (curr - (Gfx*)task->t.data_ptr),
@@ -148,9 +155,6 @@ void profileTask(OSTask* task, u16* framebuffer) {
     debug_printf("End RSP profile\n");
 
     // Restore queues to scheduler and unblock its thread
-    OSSched* scheduler = rspSchedulerGet();
-    osSetEventMesg(OS_EVENT_SP, &scheduler->interruptQ, (OSMesg)SP_EVENT_MSG);
-    osSetEventMesg(OS_EVENT_DP, &scheduler->interruptQ, (OSMesg)DP_EVENT_MSG);
-    osViSetEvent(&scheduler->interruptQ, (OSMesg)VI_EVENT_MSG, 1);
+    setSchedulerQueue(&rspSchedulerGet()->interruptQ);
     osSetThreadPri(NULL, origThreadPriority);
 }
