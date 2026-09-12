@@ -17,8 +17,6 @@
 #define MESSAGE_QUEUE_SIZE  4
 #define SAMPLES_PER_STEP    10
 
-// extern u16 __attribute__((aligned(64))) zbuffer[SCREEN_HT * SCREEN_WD];
-
 static void printChildDisplayLists(Gfx* dl, int depth, int* segments) {
     if (depth == PRINT_DL_DEPTH_MAX) {
         debug_printf("dl <depth limit>\n", depth);
@@ -145,9 +143,6 @@ void profileTask(OSTask* task, u16* framebuffer) {
         }
 
         debug_dumpbinary(framebuffer, SCREEN_WD * SCREEN_HT * 2  /* 16-bit */);
-
-        // sprintf(message, "step_zb_%d", curr - (Gfx*)task->t.data_ptr);
-        // gdbSendImage(message, SCREEN_WD, SCREEN_HT, G_IM_FMT_RGBA, G_IM_SIZ_16b, zbuffer);
 
         ++curr;
     }
