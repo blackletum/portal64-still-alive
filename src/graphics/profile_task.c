@@ -133,7 +133,7 @@ void profileTask(OSTask* task, u16* framebuffer) {
             // Report current command info, and time to reach it
             debug_printf(
                 "%d/%d 0x%08x%08x %d.%d ms\n",
-                (curr - (Gfx*)task->t.data_ptr),
+                (curr - (Gfx*)task->t.data_ptr) + 1,
                 length,
                 curr->words.w0,
                 curr->words.w1,

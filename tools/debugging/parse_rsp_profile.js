@@ -312,7 +312,7 @@ class CommandInfo {
         }
 
         return new CommandInfo(
-            Number(match[1]),
+            Number(match[1]) - 1,
             Number.parseInt(match[2], 16),
             Number.parseInt(match[3], 16),
             Number.parseInt(match[4], 16),
